@@ -1,0 +1,27 @@
+{
+  "name": "socket-mouse",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/maeldonn/socket-mouse.git",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "lint": "eslint --fix src",
+    "test": "NODE_ENV=test mocha test/ --watch"
+  },
+  "keywords": [],
+  "author": " <maeldonn> (maeldonn.github.io)",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^7.10.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^4.1.1",
+    "morgan": "^1.10.0"
+  }
+}
