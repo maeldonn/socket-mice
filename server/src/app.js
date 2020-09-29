@@ -11,12 +11,6 @@ const app = express();
 app.use(morgan('dev'));
 app.use(helmet());
 
-app.get('/', (req, res) => {
-  res.json({
-    message: 'Hello World! 👋',
-  });
-});
-
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
 
