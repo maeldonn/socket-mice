@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-const API_URL = 'http://localhost:5000/';
+const API_URL = window.location.hostname === 'localhost' ? 'http://' : 'https://socket-mice.herokuapp.com/';
 
 const socket = io.connect(API_URL);
 
