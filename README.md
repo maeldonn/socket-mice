@@ -1,1 +1,1 @@
-# socket-mouse
+# socket-mice
