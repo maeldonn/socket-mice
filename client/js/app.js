@@ -35,7 +35,7 @@ const createSpan = (id, text) => {
   span.style.color = '#FFFFFF';
   span.style.fontSize = '15px';
   span.style.position = 'absolute';
-  span.textContent = text.toUpperCase();
+  span.textContent = text.toUpperCase().trim() || 'ANONYME PLAYER';
   return span;
 };
 
