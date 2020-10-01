@@ -10148,11 +10148,12 @@ var _socket = _interopRequireDefault(require("socket.io-client"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var API_URL = 'http://localhost:5000/';
+// TODO: Change for production mode
+var API_URL = 'http://localhost:5000';
 
 var socket = _socket.default.connect(API_URL);
 
-var clients = {};
+var clients = [{}, {}];
 
 var getRandomColor = function getRandomColor() {
   var letters = '0123456789ABCDEF';
@@ -10165,9 +10166,8 @@ var getRandomColor = function getRandomColor() {
   return color;
 };
 
-var createDiv = function createDiv(id) {
-  // TODO: Add text with id
-  var div = document.createElement('span');
+var createDiv = function createDiv() {
+  var div = document.createElement('div');
   div.style.width = '40px';
   div.style.height = '40px';
   div.style.borderRadius = '30px';
@@ -10176,26 +10176,43 @@ var createDiv = function createDiv(id) {
   return div;
 };
 
+var createSpan = function createSpan(id) {
+  // TODO: Add text with id
+  var span = document.createElement('span');
+  span.style.color = '#FFFFFF';
+  span.style.fontSize = '10px';
+  span.style.position = 'absolute';
+  span.textContent = id;
+  return span;
+};
+
 socket.on('connect', function () {
-  console.log('Connected to the socket server ✅');
+  console.log('Connected to the server ✅');
 });
 socket.on('message-client-disconnected', function (id) {
-  if (clients[id]) {
-    document.body.removeChild(clients[id]);
+  if (clients[0][id]) {
+    document.body.removeChild(clients[0][id]);
   }
 });
 socket.on('mousemove', function (event) {
-  var client = clients[event.id];
+  var blob = clients[0][event.id];
+  var label = clients[1][event.id];
 
-  if (!client) {
-    var div = createDiv(event.id);
-    clients[event.id] = div;
-    client = div;
+  if (!blob && !label) {
+    var div = createDiv();
+    var span = createSpan(event.id);
+    clients[0][event.id] = div;
+    clients[1][event.id] = span;
+    blob = div;
+    label = span;
     document.body.appendChild(div);
+    document.body.appendChild(span);
   }
 
-  client.style.top = "".concat(event.y - 20, "px");
-  client.style.left = "".concat(event.x - 20, "px");
+  blob.style.top = "".concat(event.y - 20, "px");
+  blob.style.left = "".concat(event.x - 20, "px");
+  label.style.top = "".concat(event.y - 40, "px");
+  label.style.left = "".concat(event.x - 60, "px");
 });
 document.addEventListener('mousemove', function (event) {
   socket.emit('mousemove', {
@@ -10231,7 +10248,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50234" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51442" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

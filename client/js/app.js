@@ -1,10 +1,11 @@
 import io from 'socket.io-client';
 
-const API_URL = window.location.hostname === 'localhost' ? 'http://' : 'https://socket-mice.herokuapp.com/';
+// TODO: Change for production mode
+const API_URL = 'http://localhost:5000';
 
 const socket = io.connect(API_URL);
 
-const clients = {};
+const clients = [{}, {}];
 
 const getRandomColor = () => {
   const letters = '0123456789ABCDEF';
@@ -15,9 +16,8 @@ const getRandomColor = () => {
   return color;
 };
 
-const createDiv = (id) => {
-  // TODO: Add text with id
-  const div = document.createElement('span');
+const createDiv = () => {
+  const div = document.createElement('div');
   div.style.width = '40px';
   div.style.height = '40px';
   div.style.borderRadius = '30px';
@@ -26,26 +26,43 @@ const createDiv = (id) => {
   return div;
 };
 
+const createSpan = (id) => {
+  // TODO: Add text with id
+  const span = document.createElement('span');
+  span.style.color = '#FFFFFF';
+  span.style.fontSize = '10px';
+  span.style.position = 'absolute';
+  span.textContent = id;
+  return span;
+};
+
 socket.on('connect', () => {
-  console.log('Connected to the socket server ✅');
+  console.log('Connected to the server ✅');
 });
 
 socket.on('message-client-disconnected', (id) => {
-  if (clients[id]) {
-    document.body.removeChild(clients[id]);
+  if (clients[0][id]) {
+    document.body.removeChild(clients[0][id]);
   }
 });
 
 socket.on('mousemove', (event) => {
-  let client = clients[event.id];
-  if (!client) {
-    const div = createDiv(event.id);
-    clients[event.id] = div;
-    client = div;
+  let blob = clients[0][event.id];
+  let label = clients[1][event.id];
+  if (!blob && !label) {
+    const div = createDiv();
+    const span = createSpan(event.id);
+    clients[0][event.id] = div;
+    clients[1][event.id] = span;
+    blob = div;
+    label = span;
     document.body.appendChild(div);
+    document.body.appendChild(span);
   }
-  client.style.top = `${event.y - 20}px`;
-  client.style.left = `${event.x - 20}px`;
+  blob.style.top = `${event.y - 20}px`;
+  blob.style.left = `${event.x - 20}px`;
+  label.style.top = `${event.y - 40}px`;
+  label.style.left = `${event.x - 60}px`;
 });
 
 document.addEventListener('mousemove', (event) => {
