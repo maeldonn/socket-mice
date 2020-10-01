@@ -1,11 +1,11 @@
 import io from 'socket.io-client';
 
-// TODO: Change for production mode
-const API_URL = 'http://localhost:5000';
+const API_URL = process.env.NODE_ENV === 'production' ? '/' : 'http://localhost:5000';
 
 const socket = io.connect(API_URL);
 
 const clients = [{}, {}];
+let username = -1;
 
 const getRandomColor = () => {
   const letters = '0123456789ABCDEF';
@@ -16,8 +16,9 @@ const getRandomColor = () => {
   return color;
 };
 
-const createDiv = () => {
+const createDiv = (id) => {
   const div = document.createElement('div');
+  div.className = id;
   div.style.width = '40px';
   div.style.height = '40px';
   div.style.borderRadius = '30px';
@@ -27,42 +28,49 @@ const createDiv = () => {
 };
 
 const createSpan = (id) => {
-  // TODO: Add text with id
   const span = document.createElement('span');
+  span.className = id;
+  span.style.width = '1000px';
+  span.style.textAlign = 'center';
   span.style.color = '#FFFFFF';
-  span.style.fontSize = '10px';
+  span.style.fontSize = '15px';
   span.style.position = 'absolute';
-  span.textContent = id;
+  span.textContent = username || 'Random';
   return span;
 };
 
 socket.on('connect', () => {
+  const maxLength = 100;
+  while (username === -1 || (username != null && username.length > maxLength)) {
+    username = window.prompt(`Please enter a username. It should be no more than ${maxLength} characters in length`);
+  }
   console.log('Connected to the server ✅');
 });
 
 socket.on('message-client-disconnected', (id) => {
-  if (clients[0][id]) {
+  if (clients[0][id] && clients[1][id]) {
     document.body.removeChild(clients[0][id]);
+    document.body.removeChild(clients[1][id]);
   }
 });
 
 socket.on('mousemove', (event) => {
-  let blob = clients[0][event.id];
-  let label = clients[1][event.id];
+  let label = clients[0][event.id];
+  let blob = clients[1][event.id];
   if (!blob && !label) {
-    const div = createDiv();
     const span = createSpan(event.id);
-    clients[0][event.id] = div;
-    clients[1][event.id] = span;
-    blob = div;
+    const div = createDiv(event.id);
+    clients[0][event.id] = span;
+    clients[1][event.id] = div;
     label = span;
-    document.body.appendChild(div);
+    blob = div;
     document.body.appendChild(span);
+    document.body.appendChild(div);
   }
+  label.style.top = `${event.y - 40}px`;
+  label.style.left = `${event.x - 500}px`;
   blob.style.top = `${event.y - 20}px`;
   blob.style.left = `${event.x - 20}px`;
-  label.style.top = `${event.y - 40}px`;
-  label.style.left = `${event.x - 60}px`;
 });
 
 document.addEventListener('mousemove', (event) => {

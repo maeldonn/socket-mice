@@ -10148,12 +10148,12 @@ var _socket = _interopRequireDefault(require("socket.io-client"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// TODO: Change for production mode
-var API_URL = 'http://localhost:5000';
+var API_URL = "development" === 'production' ? '/' : 'http://localhost:5000';
 
 var socket = _socket.default.connect(API_URL);
 
 var clients = [{}, {}];
+var username = -1;
 
 var getRandomColor = function getRandomColor() {
   var letters = '0123456789ABCDEF';
@@ -10166,8 +10166,9 @@ var getRandomColor = function getRandomColor() {
   return color;
 };
 
-var createDiv = function createDiv() {
+var createDiv = function createDiv(id) {
   var div = document.createElement('div');
+  div.className = id;
   div.style.width = '40px';
   div.style.height = '40px';
   div.style.borderRadius = '30px';
@@ -10177,42 +10178,51 @@ var createDiv = function createDiv() {
 };
 
 var createSpan = function createSpan(id) {
-  // TODO: Add text with id
   var span = document.createElement('span');
+  span.className = id;
+  span.style.width = '1000px';
+  span.style.textAlign = 'center';
   span.style.color = '#FFFFFF';
-  span.style.fontSize = '10px';
+  span.style.fontSize = '15px';
   span.style.position = 'absolute';
-  span.textContent = id;
+  span.textContent = username || 'Random';
   return span;
 };
 
 socket.on('connect', function () {
+  var maxLength = 100;
+
+  while (username === -1 || username != null && username.length > maxLength) {
+    username = window.prompt("Please enter a username. It should be no more than ".concat(maxLength, " characters in length"));
+  }
+
   console.log('Connected to the server ✅');
 });
 socket.on('message-client-disconnected', function (id) {
-  if (clients[0][id]) {
+  if (clients[0][id] && clients[1][id]) {
     document.body.removeChild(clients[0][id]);
+    document.body.removeChild(clients[1][id]);
   }
 });
 socket.on('mousemove', function (event) {
-  var blob = clients[0][event.id];
-  var label = clients[1][event.id];
+  var label = clients[0][event.id];
+  var blob = clients[1][event.id];
 
   if (!blob && !label) {
-    var div = createDiv();
     var span = createSpan(event.id);
-    clients[0][event.id] = div;
-    clients[1][event.id] = span;
-    blob = div;
+    var div = createDiv(event.id);
+    clients[0][event.id] = span;
+    clients[1][event.id] = div;
     label = span;
-    document.body.appendChild(div);
+    blob = div;
     document.body.appendChild(span);
+    document.body.appendChild(div);
   }
 
+  label.style.top = "".concat(event.y - 40, "px");
+  label.style.left = "".concat(event.x - 500, "px");
   blob.style.top = "".concat(event.y - 20, "px");
   blob.style.left = "".concat(event.x - 20, "px");
-  label.style.top = "".concat(event.y - 40, "px");
-  label.style.left = "".concat(event.x - 60, "px");
 });
 document.addEventListener('mousemove', function (event) {
   socket.emit('mousemove', {
@@ -10248,7 +10258,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51442" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53066" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
