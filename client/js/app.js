@@ -5,7 +5,7 @@ const API_URL = process.env.NODE_ENV === 'production' ? '/' : 'http://localhost:
 const socket = io.connect(API_URL);
 
 const clients = [{}, {}];
-let username = -1;
+let username = '';
 
 const getRandomColor = () => {
   const letters = '0123456789ABCDEF';
@@ -35,13 +35,13 @@ const createSpan = (id, text) => {
   span.style.color = '#FFFFFF';
   span.style.fontSize = '15px';
   span.style.position = 'absolute';
-  span.textContent = text || 'Anonymous player';
+  span.textContent = text.toUpperCase();
   return span;
 };
 
 socket.on('connect', () => {
   const maxLength = 100;
-  while (username === -1 || (username != null && username.length > maxLength)) {
+  while (username === '' || (username != null && username.length > maxLength)) {
     username = window.prompt(`Please enter a username. It should be no more than ${maxLength} characters in length`);
   }
   console.log('Connected to the server ✅');
