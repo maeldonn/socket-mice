@@ -27,7 +27,7 @@ const createDiv = (id) => {
   return div;
 };
 
-const createSpan = (id) => {
+const createSpan = (id, text) => {
   const span = document.createElement('span');
   span.className = id;
   span.style.width = '1000px';
@@ -35,7 +35,7 @@ const createSpan = (id) => {
   span.style.color = '#FFFFFF';
   span.style.fontSize = '15px';
   span.style.position = 'absolute';
-  span.textContent = username || 'Random';
+  span.textContent = text || 'Anonymous player';
   return span;
 };
 
@@ -58,7 +58,7 @@ socket.on('mousemove', (event) => {
   let label = clients[0][event.id];
   let blob = clients[1][event.id];
   if (!blob && !label) {
-    const span = createSpan(event.id);
+    const span = createSpan(event.id, event.username);
     const div = createDiv(event.id);
     clients[0][event.id] = span;
     clients[1][event.id] = div;
@@ -77,5 +77,6 @@ document.addEventListener('mousemove', (event) => {
   socket.emit('mousemove', {
     x: event.clientX,
     y: event.clientY,
+    username,
   });
 });

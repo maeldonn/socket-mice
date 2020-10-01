@@ -10177,7 +10177,7 @@ var createDiv = function createDiv(id) {
   return div;
 };
 
-var createSpan = function createSpan(id) {
+var createSpan = function createSpan(id, text) {
   var span = document.createElement('span');
   span.className = id;
   span.style.width = '1000px';
@@ -10185,7 +10185,7 @@ var createSpan = function createSpan(id) {
   span.style.color = '#FFFFFF';
   span.style.fontSize = '15px';
   span.style.position = 'absolute';
-  span.textContent = username || 'Random';
+  span.textContent = text || 'Anonymous player';
   return span;
 };
 
@@ -10209,7 +10209,7 @@ socket.on('mousemove', function (event) {
   var blob = clients[1][event.id];
 
   if (!blob && !label) {
-    var span = createSpan(event.id);
+    var span = createSpan(event.id, event.username);
     var div = createDiv(event.id);
     clients[0][event.id] = span;
     clients[1][event.id] = div;
@@ -10227,7 +10227,8 @@ socket.on('mousemove', function (event) {
 document.addEventListener('mousemove', function (event) {
   socket.emit('mousemove', {
     x: event.clientX,
-    y: event.clientY
+    y: event.clientY,
+    username: username
   });
 });
 },{"socket.io-client":"node_modules/socket.io-client/lib/index.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
@@ -10258,7 +10259,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53066" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55073" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
