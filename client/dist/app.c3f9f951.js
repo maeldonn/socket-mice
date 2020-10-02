@@ -10153,7 +10153,8 @@ var API_URL = "development" === 'production' ? '/' : 'http://localhost:5000';
 var socket = _socket.default.connect(API_URL);
 
 var clients = [{}, {}];
-var username = -1;
+var username = '';
+var score = 0;
 
 var getRandomColor = function getRandomColor() {
   var letters = '0123456789ABCDEF';
@@ -10166,7 +10167,7 @@ var getRandomColor = function getRandomColor() {
   return color;
 };
 
-var createDiv = function createDiv(id) {
+var createDiv = function createDiv(id, text) {
   var div = document.createElement('div');
   div.className = id;
   div.style.width = '40px';
@@ -10174,6 +10175,11 @@ var createDiv = function createDiv(id) {
   div.style.borderRadius = '30px';
   div.style.background = getRandomColor();
   div.style.position = 'absolute';
+  div.textContent = text;
+  div.style.display = 'flex';
+  div.style.justifyContent = 'center';
+  div.style.alignItems = 'center';
+  div.style.color = '#FFFFFF';
   return div;
 };
 
@@ -10185,14 +10191,14 @@ var createSpan = function createSpan(id, text) {
   span.style.color = '#FFFFFF';
   span.style.fontSize = '15px';
   span.style.position = 'absolute';
-  span.textContent = text || 'Anonymous player';
+  span.textContent = text.toUpperCase().trim() || 'ANONYME PLAYER';
   return span;
 };
 
 socket.on('connect', function () {
   var maxLength = 100;
 
-  while (username === -1 || username != null && username.length > maxLength) {
+  while (username === '' || username != null && username.length > maxLength) {
     username = window.prompt("Please enter a username. It should be no more than ".concat(maxLength, " characters in length"));
   }
 
@@ -10210,7 +10216,7 @@ socket.on('mousemove', function (event) {
 
   if (!blob && !label) {
     var span = createSpan(event.id, event.username);
-    var div = createDiv(event.id);
+    var div = createDiv(event.id, event.score);
     clients[0][event.id] = span;
     clients[1][event.id] = div;
     label = span;
@@ -10228,7 +10234,8 @@ document.addEventListener('mousemove', function (event) {
   socket.emit('mousemove', {
     x: event.clientX,
     y: event.clientY,
-    username: username
+    username: username,
+    score: score
   });
 });
 },{"socket.io-client":"node_modules/socket.io-client/lib/index.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
@@ -10259,7 +10266,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55073" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49157" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

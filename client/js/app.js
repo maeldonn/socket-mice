@@ -6,6 +6,7 @@ const socket = io.connect(API_URL);
 
 const clients = [{}, {}];
 let username = '';
+const score = 0;
 
 const getRandomColor = () => {
   const letters = '0123456789ABCDEF';
@@ -16,7 +17,7 @@ const getRandomColor = () => {
   return color;
 };
 
-const createDiv = (id) => {
+const createDiv = (id, text) => {
   const div = document.createElement('div');
   div.className = id;
   div.style.width = '40px';
@@ -24,6 +25,11 @@ const createDiv = (id) => {
   div.style.borderRadius = '30px';
   div.style.background = getRandomColor();
   div.style.position = 'absolute';
+  div.textContent = text;
+  div.style.display = 'flex';
+  div.style.justifyContent = 'center';
+  div.style.alignItems = 'center';
+  div.style.color = '#FFFFFF';
   return div;
 };
 
@@ -59,7 +65,7 @@ socket.on('mousemove', (event) => {
   let blob = clients[1][event.id];
   if (!blob && !label) {
     const span = createSpan(event.id, event.username);
-    const div = createDiv(event.id);
+    const div = createDiv(event.id, event.score);
     clients[0][event.id] = span;
     clients[1][event.id] = div;
     label = span;
@@ -78,5 +84,6 @@ document.addEventListener('mousemove', (event) => {
     x: event.clientX,
     y: event.clientY,
     username,
+    score,
   });
 });
