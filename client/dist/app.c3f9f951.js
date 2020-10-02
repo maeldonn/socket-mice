@@ -10155,6 +10155,7 @@ var socket = _socket.default.connect(API_URL);
 var clients = [{}, {}];
 var username = '';
 var score = 0;
+var blobColor = '';
 
 var getRandomColor = function getRandomColor() {
   var letters = '0123456789ABCDEF';
@@ -10167,13 +10168,13 @@ var getRandomColor = function getRandomColor() {
   return color;
 };
 
-var createDiv = function createDiv(id, text) {
+var createBlob = function createBlob(id, text, color) {
   var div = document.createElement('div');
   div.className = id;
   div.style.width = '40px';
   div.style.height = '40px';
   div.style.borderRadius = '30px';
-  div.style.background = getRandomColor();
+  div.style.background = color;
   div.style.position = 'absolute';
   div.textContent = text;
   div.style.display = 'flex';
@@ -10183,7 +10184,7 @@ var createDiv = function createDiv(id, text) {
   return div;
 };
 
-var createSpan = function createSpan(id, text) {
+var createLabel = function createLabel(id, text) {
   var span = document.createElement('span');
   span.className = id;
   span.style.width = '1000px';
@@ -10191,7 +10192,7 @@ var createSpan = function createSpan(id, text) {
   span.style.color = '#FFFFFF';
   span.style.fontSize = '15px';
   span.style.position = 'absolute';
-  span.textContent = text.toUpperCase().trim() || 'ANONYME PLAYER';
+  span.textContent = text.toUpperCase().trim() || 'ANONYMOUS PLAYER';
   return span;
 };
 
@@ -10202,6 +10203,7 @@ socket.on('connect', function () {
     username = window.prompt("Please enter a username. It should be no more than ".concat(maxLength, " characters in length"));
   }
 
+  blobColor = getRandomColor();
   console.log('Connected to the server ✅');
 });
 socket.on('message-client-disconnected', function (id) {
@@ -10215,8 +10217,8 @@ socket.on('mousemove', function (event) {
   var blob = clients[1][event.id];
 
   if (!blob && !label) {
-    var span = createSpan(event.id, event.username);
-    var div = createDiv(event.id, event.score);
+    var span = createLabel(event.id, event.username);
+    var div = createBlob(event.id, event.score, event.color);
     clients[0][event.id] = span;
     clients[1][event.id] = div;
     label = span;
@@ -10235,7 +10237,8 @@ document.addEventListener('mousemove', function (event) {
     x: event.clientX,
     y: event.clientY,
     username: username,
-    score: score
+    score: score,
+    color: blobColor
   });
 });
 },{"socket.io-client":"node_modules/socket.io-client/lib/index.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
@@ -10266,7 +10269,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49157" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51845" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

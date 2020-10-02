@@ -9,6 +9,7 @@ body {
   background: #000000;
   cursor: none;
   overflow: hidden;
+  font-family: 'Roboto';
 }
 
 span {
