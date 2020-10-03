@@ -21,30 +21,25 @@ const getRandomColor = () => {
 
 const createBlob = (id, text, color) => {
   const div = document.createElement('div');
-  div.className = id;
-  div.style.width = '40px';
-  div.style.height = '40px';
-  div.style.borderRadius = '30px';
+  div.className = `blob ${id}`;
   div.style.background = color;
-  div.style.position = 'absolute';
   div.textContent = text;
-  div.style.display = 'flex';
-  div.style.justifyContent = 'center';
-  div.style.alignItems = 'center';
-  div.style.color = '#FFFFFF';
   return div;
 };
 
 const createLabel = (id, text) => {
   const span = document.createElement('span');
-  span.className = id;
-  span.style.width = '1000px';
-  span.style.textAlign = 'center';
-  span.style.color = '#FFFFFF';
-  span.style.fontSize = '15px';
-  span.style.position = 'absolute';
+  span.className = `label ${id}`;
   span.textContent = text.toUpperCase().trim() || 'ANONYMOUS PLAYER';
   return span;
+};
+
+const createCoin = () => {
+  const div = document.createElement('div');
+  div.className = 'coin';
+  div.style.top = `${Math.floor(Math.random() * document.body.clientHeight)}px`;
+  div.style.left = `${Math.floor(Math.random() * document.body.clientWidth)}px`;
+  return div;
 };
 
 socket.on('connect', () => {
@@ -53,7 +48,8 @@ socket.on('connect', () => {
     username = window.prompt(`Please enter a username. It should be no more than ${maxLength} characters in length`);
   }
   blobColor = getRandomColor();
-  console.log('Connected to the server ✅');
+  const div = createCoin();
+  document.body.appendChild(div);
 });
 
 socket.on('message-client-disconnected', (id) => {

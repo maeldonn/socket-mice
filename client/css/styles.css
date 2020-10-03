@@ -12,6 +12,32 @@ body {
   font-family: 'Roboto';
 }
 
-span {
-  font-size: 4em;
+.label {
+  z-index: 10;
+  width: 1000px;
+  text-align: center;
+  color: #FFFFFF;
+  font-size: 15px;
+  position: absolute;
+}
+
+.blob {
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  border-radius: 30px;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #FFFFFF;
+}
+
+.coin {
+  z-index: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
+  background: #FFFF00;
+  position: absolute;
 }

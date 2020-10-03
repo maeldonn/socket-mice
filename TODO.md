@@ -1,5 +1,4 @@
-* [ ] Ico file
 * [ ] Refactor app
-* [ ] Add score
 * [ ] Light color
-* [ ] Same color for everyone
+* [ ] Rooms of 5 users
+* [ ] 20 points to win then reset points

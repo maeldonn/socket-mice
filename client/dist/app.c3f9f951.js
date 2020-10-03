@@ -10158,6 +10158,7 @@ var score = 0;
 var blobColor = '';
 
 var getRandomColor = function getRandomColor() {
+  // TODO: Get only light colors
   var letters = '0123456789ABCDEF';
   var color = '#';
 
@@ -10170,30 +10171,25 @@ var getRandomColor = function getRandomColor() {
 
 var createBlob = function createBlob(id, text, color) {
   var div = document.createElement('div');
-  div.className = id;
-  div.style.width = '40px';
-  div.style.height = '40px';
-  div.style.borderRadius = '30px';
+  div.className = "blob ".concat(id);
   div.style.background = color;
-  div.style.position = 'absolute';
   div.textContent = text;
-  div.style.display = 'flex';
-  div.style.justifyContent = 'center';
-  div.style.alignItems = 'center';
-  div.style.color = '#FFFFFF';
   return div;
 };
 
 var createLabel = function createLabel(id, text) {
   var span = document.createElement('span');
-  span.className = id;
-  span.style.width = '1000px';
-  span.style.textAlign = 'center';
-  span.style.color = '#FFFFFF';
-  span.style.fontSize = '15px';
-  span.style.position = 'absolute';
+  span.className = "label ".concat(id);
   span.textContent = text.toUpperCase().trim() || 'ANONYMOUS PLAYER';
   return span;
+};
+
+var createCoin = function createCoin() {
+  var div = document.createElement('div');
+  div.className = 'coin';
+  div.style.top = "".concat(Math.floor(Math.random() * document.body.clientHeight), "px");
+  div.style.left = "".concat(Math.floor(Math.random() * document.body.clientWidth), "px");
+  return div;
 };
 
 socket.on('connect', function () {
@@ -10204,7 +10200,8 @@ socket.on('connect', function () {
   }
 
   blobColor = getRandomColor();
-  console.log('Connected to the server ✅');
+  var div = createCoin();
+  document.body.appendChild(div);
 });
 socket.on('message-client-disconnected', function (id) {
   if (clients[0][id] && clients[1][id]) {
@@ -10269,7 +10266,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51845" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55207" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
