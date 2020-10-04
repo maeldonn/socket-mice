@@ -45,7 +45,7 @@ socket.on('connect', () => {
   blobColor = (function lol(m, s, c) {
     return s[m.floor(m.random() * s.length)]
         + (c && lol(m, s, c - 1));
-  }(Math, '3456789ABCD', 4));
+  }(Math, '56789ABCD', 4));
 });
 
 socket.on('message-client-disconnected', (id) => {
