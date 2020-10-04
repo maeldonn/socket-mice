@@ -6,8 +6,11 @@ const socket = io.connect(API_URL);
 
 const clients = [{}, {}];
 let username = '';
-const score = 0;
+let score = 0;
 let blobColor = '';
+const coinPosition = [];
+let coin = null;
+let isEated = false;
 
 const getRandomColor = () => {
   // TODO: Get only light colors
@@ -34,11 +37,13 @@ const createLabel = (id, text) => {
   return span;
 };
 
-const createCoin = () => {
+const createCoin = (top, left) => {
+  coinPosition[0] = Math.floor(top * document.body.clientHeight);
+  coinPosition[1] = Math.floor(left * document.body.clientWidth);
   const div = document.createElement('div');
   div.className = 'coin';
-  div.style.top = `${Math.floor(Math.random() * document.body.clientHeight)}px`;
-  div.style.left = `${Math.floor(Math.random() * document.body.clientWidth)}px`;
+  div.style.top = `${coinPosition[0]}px`;
+  div.style.left = `${coinPosition[1]}px`;
   return div;
 };
 
@@ -48,8 +53,6 @@ socket.on('connect', () => {
     username = window.prompt(`Please enter a username. It should be no more than ${maxLength} characters in length`);
   }
   blobColor = getRandomColor();
-  const div = createCoin();
-  document.body.appendChild(div);
 });
 
 socket.on('message-client-disconnected', (id) => {
@@ -57,6 +60,15 @@ socket.on('message-client-disconnected', (id) => {
     document.body.removeChild(clients[0][id]);
     document.body.removeChild(clients[1][id]);
   }
+});
+
+socket.on('coin-position', (position) => {
+  if (coin) {
+    document.body.removeChild(coin);
+  }
+  const div = createCoin(position.top, position.left);
+  coin = div;
+  document.body.appendChild(div);
 });
 
 socket.on('mousemove', (event) => {
@@ -76,14 +88,23 @@ socket.on('mousemove', (event) => {
   label.style.left = `${event.x - 500}px`;
   blob.style.top = `${event.y - 20}px`;
   blob.style.left = `${event.x - 20}px`;
+  blob.textContent = event.score;
 });
 
 document.addEventListener('mousemove', (event) => {
+  const y = event.clientY >= coinPosition[0] && event.clientY <= coinPosition[0] + 20;
+  const x = event.clientX >= coinPosition[1] && event.clientX <= coinPosition[1] + 20;
+  if (x && y) {
+    score += 1;
+    isEated = true;
+  }
   socket.emit('mousemove', {
     x: event.clientX,
     y: event.clientY,
     username,
     score,
     color: blobColor,
+    isEated,
   });
+  isEated = false;
 });

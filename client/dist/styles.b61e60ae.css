@@ -13,6 +13,8 @@ body {
 }
 
 .label {
+  top: 0;
+  left: 0;
   z-index: 10;
   width: 1000px;
   text-align: center;
@@ -22,6 +24,8 @@ body {
 }
 
 .blob {
+  top: 0;
+  left: 0;
   z-index: 10;
   width: 40px;
   height: 40px;
@@ -34,6 +38,8 @@ body {
 }
 
 .coin {
+  top: 0;
+  left: 0;
   z-index: 0;
   width: 20px;
   height: 20px;

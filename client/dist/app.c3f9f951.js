@@ -10156,6 +10156,9 @@ var clients = [{}, {}];
 var username = '';
 var score = 0;
 var blobColor = '';
+var coinPosition = [];
+var coin = null;
+var isEated = false;
 
 var getRandomColor = function getRandomColor() {
   // TODO: Get only light colors
@@ -10184,11 +10187,13 @@ var createLabel = function createLabel(id, text) {
   return span;
 };
 
-var createCoin = function createCoin() {
+var createCoin = function createCoin(top, left) {
+  coinPosition[0] = Math.floor(top * document.body.clientHeight);
+  coinPosition[1] = Math.floor(left * document.body.clientWidth);
   var div = document.createElement('div');
   div.className = 'coin';
-  div.style.top = "".concat(Math.floor(Math.random() * document.body.clientHeight), "px");
-  div.style.left = "".concat(Math.floor(Math.random() * document.body.clientWidth), "px");
+  div.style.top = "".concat(coinPosition[0], "px");
+  div.style.left = "".concat(coinPosition[1], "px");
   return div;
 };
 
@@ -10200,14 +10205,21 @@ socket.on('connect', function () {
   }
 
   blobColor = getRandomColor();
-  var div = createCoin();
-  document.body.appendChild(div);
 });
 socket.on('message-client-disconnected', function (id) {
   if (clients[0][id] && clients[1][id]) {
     document.body.removeChild(clients[0][id]);
     document.body.removeChild(clients[1][id]);
   }
+});
+socket.on('coin-position', function (position) {
+  if (coin) {
+    document.body.removeChild(coin);
+  }
+
+  var div = createCoin(position.top, position.left);
+  coin = div;
+  document.body.appendChild(div);
 });
 socket.on('mousemove', function (event) {
   var label = clients[0][event.id];
@@ -10228,15 +10240,26 @@ socket.on('mousemove', function (event) {
   label.style.left = "".concat(event.x - 500, "px");
   blob.style.top = "".concat(event.y - 20, "px");
   blob.style.left = "".concat(event.x - 20, "px");
+  blob.textContent = event.score;
 });
 document.addEventListener('mousemove', function (event) {
+  var y = event.clientY >= coinPosition[0] && event.clientY <= coinPosition[0] + 20;
+  var x = event.clientX >= coinPosition[1] && event.clientX <= coinPosition[1] + 20;
+
+  if (x && y) {
+    score += 1;
+    isEated = true;
+  }
+
   socket.emit('mousemove', {
     x: event.clientX,
     y: event.clientY,
     username: username,
     score: score,
-    color: blobColor
+    color: blobColor,
+    isEated: isEated
   });
+  isEated = false;
 });
 },{"socket.io-client":"node_modules/socket.io-client/lib/index.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -10266,7 +10289,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55207" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59237" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
