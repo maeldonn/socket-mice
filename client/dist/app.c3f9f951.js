@@ -10153,29 +10153,16 @@ var API_URL = "development" === 'production' ? '/' : 'http://localhost:5000';
 var socket = _socket.default.connect(API_URL);
 
 var clients = [{}, {}];
+var coinPosition = [];
 var username = '';
 var score = 0;
 var blobColor = '';
-var coinPosition = [];
 var coin = null;
-var isEated = false;
-
-var getRandomColor = function getRandomColor() {
-  // TODO: Get only light colors
-  var letters = '0123456789ABCDEF';
-  var color = '#';
-
-  for (var i = 0; i < 6; i += 1) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-
-  return color;
-};
 
 var createBlob = function createBlob(id, text, color) {
   var div = document.createElement('div');
   div.className = "blob ".concat(id);
-  div.style.background = color;
+  div.style.background = "#".concat(color);
   div.textContent = text;
   return div;
 };
@@ -10204,7 +10191,9 @@ socket.on('connect', function () {
     username = window.prompt("Please enter a username. It should be no more than ".concat(maxLength, " characters in length"));
   }
 
-  blobColor = getRandomColor();
+  blobColor = function lol(m, s, c) {
+    return s[m.floor(m.random() * s.length)] + (c && lol(m, s, c - 1));
+  }(Math, '3456789ABCD', 4);
 });
 socket.on('message-client-disconnected', function (id) {
   if (clients[0][id] && clients[1][id]) {
@@ -10248,18 +10237,24 @@ document.addEventListener('mousemove', function (event) {
 
   if (x && y) {
     score += 1;
-    isEated = true;
+    socket.emit('mousemove', {
+      x: event.clientX,
+      y: event.clientY,
+      username: username,
+      score: score,
+      color: blobColor,
+      isEated: true
+    });
+  } else {
+    socket.emit('mousemove', {
+      x: event.clientX,
+      y: event.clientY,
+      username: username,
+      score: score,
+      color: blobColor,
+      isEated: false
+    });
   }
-
-  socket.emit('mousemove', {
-    x: event.clientX,
-    y: event.clientY,
-    username: username,
-    score: score,
-    color: blobColor,
-    isEated: isEated
-  });
-  isEated = false;
 });
 },{"socket.io-client":"node_modules/socket.io-client/lib/index.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -10289,7 +10284,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59237" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59691" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

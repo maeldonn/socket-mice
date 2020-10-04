@@ -5,27 +5,17 @@ const API_URL = process.env.NODE_ENV === 'production' ? '/' : 'http://localhost:
 const socket = io.connect(API_URL);
 
 const clients = [{}, {}];
+const coinPosition = [];
+
 let username = '';
 let score = 0;
 let blobColor = '';
-const coinPosition = [];
 let coin = null;
-let isEated = false;
-
-const getRandomColor = () => {
-  // TODO: Get only light colors
-  const letters = '0123456789ABCDEF';
-  let color = '#';
-  for (let i = 0; i < 6; i += 1) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-};
 
 const createBlob = (id, text, color) => {
   const div = document.createElement('div');
   div.className = `blob ${id}`;
-  div.style.background = color;
+  div.style.background = `#${color}`;
   div.textContent = text;
   return div;
 };
@@ -52,7 +42,10 @@ socket.on('connect', () => {
   while (username === '' || (username != null && username.length > maxLength)) {
     username = window.prompt(`Please enter a username. It should be no more than ${maxLength} characters in length`);
   }
-  blobColor = getRandomColor();
+  blobColor = (function lol(m, s, c) {
+    return s[m.floor(m.random() * s.length)]
+        + (c && lol(m, s, c - 1));
+  }(Math, '3456789ABCD', 4));
 });
 
 socket.on('message-client-disconnected', (id) => {
@@ -96,15 +89,22 @@ document.addEventListener('mousemove', (event) => {
   const x = event.clientX >= coinPosition[1] && event.clientX <= coinPosition[1] + 20;
   if (x && y) {
     score += 1;
-    isEated = true;
+    socket.emit('mousemove', {
+      x: event.clientX,
+      y: event.clientY,
+      username,
+      score,
+      color: blobColor,
+      isEated: true,
+    });
+  } else {
+    socket.emit('mousemove', {
+      x: event.clientX,
+      y: event.clientY,
+      username,
+      score,
+      color: blobColor,
+      isEated: false,
+    });
   }
-  socket.emit('mousemove', {
-    x: event.clientX,
-    y: event.clientY,
-    username,
-    score,
-    color: blobColor,
-    isEated,
-  });
-  isEated = false;
 });
