@@ -42,9 +42,9 @@ socket.on('connect', () => {
   while (username === '' || (username != null && username.length > maxLength)) {
     username = window.prompt(`Please enter a username. It should be no more than ${maxLength} characters in length`);
   }
-  blobColor = (function lol(m, s, c) {
+  blobColor = (function color(m, s, c) {
     return s[m.floor(m.random() * s.length)]
-        + (c && lol(m, s, c - 1));
+        + (c && color(m, s, c - 1));
   }(Math, '56789ABCD', 4));
 });
 
@@ -74,6 +74,10 @@ socket.on('mousemove', (event) => {
     clients[1][event.id] = div;
     label = span;
     blob = div;
+    if (event.id === socket.io.engine.id) {
+      label.style.zIndex = 1000;
+      blob.style.zIndex = 1000;
+    }
     document.body.appendChild(span);
     document.body.appendChild(div);
   }

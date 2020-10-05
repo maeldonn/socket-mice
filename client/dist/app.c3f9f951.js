@@ -10191,9 +10191,9 @@ socket.on('connect', function () {
     username = window.prompt("Please enter a username. It should be no more than ".concat(maxLength, " characters in length"));
   }
 
-  blobColor = function lol(m, s, c) {
-    return s[m.floor(m.random() * s.length)] + (c && lol(m, s, c - 1));
-  }(Math, '3456789ABCD', 4);
+  blobColor = function color(m, s, c) {
+    return s[m.floor(m.random() * s.length)] + (c && color(m, s, c - 1));
+  }(Math, '56789ABCD', 4);
 });
 socket.on('message-client-disconnected', function (id) {
   if (clients[0][id] && clients[1][id]) {
@@ -10221,6 +10221,12 @@ socket.on('mousemove', function (event) {
     clients[1][event.id] = div;
     label = span;
     blob = div;
+
+    if (event.id === socket.io.engine.id) {
+      label.style.zIndex = 1000;
+      blob.style.zIndex = 1000;
+    }
+
     document.body.appendChild(span);
     document.body.appendChild(div);
   }
@@ -10284,7 +10290,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59691" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49649" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

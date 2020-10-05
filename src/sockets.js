@@ -2,8 +2,8 @@ const socketIO = require('socket.io');
 
 const coinPosition = [];
 
-const sendCoinPosition = (socket) => {
-  socket.emit('coin-position', {
+const sendCoinPosition = (type) => {
+  type.emit('coin-position', {
     top: coinPosition[0],
     left: coinPosition[1],
   });
@@ -27,7 +27,7 @@ const init = (server) => {
       if (event.isEated) {
         coinPosition[0] = Math.random();
         coinPosition[1] = Math.random();
-        sendCoinPosition(socket);
+        sendCoinPosition(io);
       }
       io.emit('mousemove', {
         id: socket.id,
