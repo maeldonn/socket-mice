@@ -24,6 +24,13 @@ const init = (server) => {
     sendCoinPosition(socket);
 
     socket.on('mousemove', (event) => {
+      if (event.score >= 20) {
+        io.emit('game-over', {
+          name: event.username,
+          color: event.color,
+        });
+        return;
+      }
       if (event.isEated) {
         coinPosition[0] = Math.random();
         coinPosition[1] = Math.random();

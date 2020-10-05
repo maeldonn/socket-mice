@@ -41,3 +41,14 @@ body {
   background: #FFFF00;
   position: absolute;
 }
+
+.game-over {
+  width: 80vw;
+  height: 80vh;
+  margin: 10vh 10vw;
+  font-size: 3em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #FFFFFF;
+}
