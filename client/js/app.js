@@ -57,13 +57,11 @@ socket.on('message-client-disconnected', (id) => {
 
 socket.on('game-over', (winner) => {
   document.body.innerHTML = '';
-  // Afficher winner (boule + nom + refresh to restart a game)
   const div = document.createElement('div');
   div.className = 'game-over';
   div.style.background = `#${winner.color}`;
   div.textContent = `${winner.name} is the winner. Refresh the page to join a new game.`;
   document.body.appendChild(div);
-  // Deconnecter socket
 });
 
 socket.on('coin-position', (position) => {

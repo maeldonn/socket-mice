@@ -24,12 +24,12 @@ const init = (server) => {
     sendCoinPosition(socket);
 
     socket.on('mousemove', (event) => {
-      if (event.score >= 20) {
+      if (event.score >= 3) {
         io.emit('game-over', {
           name: event.username,
           color: event.color,
         });
-        return;
+        return socket.disconnect();
       }
       if (event.isEated) {
         coinPosition[0] = Math.random();

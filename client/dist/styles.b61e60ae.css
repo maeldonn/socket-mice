@@ -43,14 +43,16 @@ body {
 }
 
 .game-over {
-  width: 80vw;
-  height: 80vh;
+  width: calc(80vw - 1em);
+  height: calc(80vh - 1em);
   margin: 10vh 10vw;
+  padding: 1em;
   font-size: 3em;
   display: flex;
   justify-content: center;
   align-items: center;
   color: #FFFFFF;
+  cursor: auto;
 }
 
 /*# sourceMappingURL=/styles.b61e60ae.css.map */

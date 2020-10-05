@@ -10202,13 +10202,12 @@ socket.on('message-client-disconnected', function (id) {
   }
 });
 socket.on('game-over', function (winner) {
-  document.body.innerHTML = ''; // Afficher winner (boule + nom + refresh to restart a game)
-
+  document.body.innerHTML = '';
   var div = document.createElement('div');
   div.className = 'game-over';
   div.style.background = "#".concat(winner.color);
   div.textContent = "".concat(winner.name, " is the winner. Refresh the page to join a new game.");
-  document.body.appendChild(div); // Deconnecter socket
+  document.body.appendChild(div);
 });
 socket.on('coin-position', function (position) {
   if (coin) {
@@ -10299,7 +10298,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49888" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50412" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
