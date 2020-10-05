@@ -41,6 +41,7 @@ const createCoin = (top, left) => {
 socket.on('connect', () => {
   const maxLength = 100;
   while (username === '' || (username != null && username.length > maxLength)) {
+    // eslint-disable-next-line no-alert
     username = window.prompt(`Please enter a username. It should be no more than ${maxLength} characters in length`).toUpperCase();
   }
   blobColor = (function color(m, s, c) {
@@ -62,6 +63,7 @@ socket.on('game-over', (winner) => {
   div.className = 'game-over';
   div.style.background = `#${winner.color}`;
   div.textContent = `${winner.name} is the winner. Click on me to refresh the page and join a new game.`;
+  // eslint-disable-next-line no-restricted-globals
   div.onclick = () => location.reload();
   document.body.appendChild(div);
 });

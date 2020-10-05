@@ -18,6 +18,7 @@ body {
   text-align: center;
   color: #FFFFFF;
   font-size: 15px;
+  user-select: none;
   position: absolute;
 }
 
@@ -54,5 +55,6 @@ body {
   color: #FFFFFF;
   cursor: pointer;
 }
+
 
 /*# sourceMappingURL=/styles.b61e60ae.css.map */

@@ -10158,6 +10158,7 @@ var username = '';
 var score = 0;
 var blobColor = '';
 var coin = null;
+var stopEating = false;
 
 var createBlob = function createBlob(id, text, color) {
   var div = document.createElement('div');
@@ -10188,6 +10189,7 @@ socket.on('connect', function () {
   var maxLength = 100;
 
   while (username === '' || username != null && username.length > maxLength) {
+    // eslint-disable-next-line no-alert
     username = window.prompt("Please enter a username. It should be no more than ".concat(maxLength, " characters in length")).toUpperCase();
   }
 
@@ -10206,7 +10208,7 @@ socket.on('game-over', function (winner) {
   var div = document.createElement('div');
   div.className = 'game-over';
   div.style.background = "#".concat(winner.color);
-  div.textContent = "".concat(winner.name, " is the winner. Click on me to refresh the page and join a new game.");
+  div.textContent = "".concat(winner.name, " is the winner. Click on me to refresh the page and join a new game."); // eslint-disable-next-line no-restricted-globals
 
   div.onclick = function () {
     return location.reload();
@@ -10215,6 +10217,8 @@ socket.on('game-over', function (winner) {
   document.body.appendChild(div);
 });
 socket.on('coin-position', function (position) {
+  stopEating = false;
+
   if (coin) {
     document.body.removeChild(coin);
   }
@@ -10255,7 +10259,11 @@ document.addEventListener('mousemove', function (event) {
   var x = event.clientX >= coinPosition[1] && event.clientX <= coinPosition[1] + 20;
 
   if (x && y) {
-    score += 1;
+    if (!stopEating) {
+      score += 1;
+      stopEating = true;
+    }
+
     socket.emit('mousemove', {
       x: event.clientX,
       y: event.clientY,
@@ -10303,7 +10311,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50619" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51118" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
