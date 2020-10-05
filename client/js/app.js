@@ -11,6 +11,7 @@ let username = '';
 let score = 0;
 let blobColor = '';
 let coin = null;
+let stopEating = false;
 
 const createBlob = (id, text, color) => {
   const div = document.createElement('div');
@@ -66,6 +67,7 @@ socket.on('game-over', (winner) => {
 });
 
 socket.on('coin-position', (position) => {
+  stopEating = false;
   if (coin) {
     document.body.removeChild(coin);
   }
@@ -102,7 +104,10 @@ document.addEventListener('mousemove', (event) => {
   const y = event.clientY >= coinPosition[0] && event.clientY <= coinPosition[0] + 20;
   const x = event.clientX >= coinPosition[1] && event.clientX <= coinPosition[1] + 20;
   if (x && y) {
-    score += 1;
+    if (!stopEating) {
+      score += 1;
+      stopEating = true;
+    }
     socket.emit('mousemove', {
       x: event.clientX,
       y: event.clientY,
