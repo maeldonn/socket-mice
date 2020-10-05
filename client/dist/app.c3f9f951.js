@@ -10206,7 +10206,12 @@ socket.on('game-over', function (winner) {
   var div = document.createElement('div');
   div.className = 'game-over';
   div.style.background = "#".concat(winner.color);
-  div.textContent = "".concat(winner.name, " is the winner. Refresh the page to join a new game.");
+  div.textContent = "".concat(winner.name, " is the winner. Click on me to refresh the page and join a new game.");
+
+  div.onclick = function () {
+    return location.reload();
+  };
+
   document.body.appendChild(div);
 });
 socket.on('coin-position', function (position) {
@@ -10298,7 +10303,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50412" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50619" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

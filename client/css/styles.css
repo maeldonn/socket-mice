@@ -43,14 +43,14 @@ body {
 }
 
 .game-over {
-  width: calc(80vw - 1em);
-  height: calc(80vh - 1em);
-  margin: 10vh 10vw;
+  width: 80vw;
+  height: 80vh;
+  margin: calc(10vh - 1em) calc(10vw - 1em);
   padding: 1em;
   font-size: 3em;
   display: flex;
   justify-content: center;
   align-items: center;
   color: #FFFFFF;
-  cursor: auto;
+  cursor: pointer;
 }

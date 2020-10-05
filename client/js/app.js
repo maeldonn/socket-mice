@@ -60,7 +60,8 @@ socket.on('game-over', (winner) => {
   const div = document.createElement('div');
   div.className = 'game-over';
   div.style.background = `#${winner.color}`;
-  div.textContent = `${winner.name} is the winner. Refresh the page to join a new game.`;
+  div.textContent = `${winner.name} is the winner. Click on me to refresh the page and join a new game.`;
+  div.onclick = () => location.reload();
   document.body.appendChild(div);
 });
 
